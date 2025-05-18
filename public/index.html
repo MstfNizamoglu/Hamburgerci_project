@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kullanıcı Kayıt Formu - Hamburgerci Musty</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background-color: #f4f8fb;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      max-width: 450px;
+      width: 100%;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+    }
+
+    .btn-primary {
+      background-color: #ff6600;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #e65c00;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Kullanıcı Kayıt Formu</h2>
+    <form id="userForm" novalidate>
+      <div class="mb-3">
+        <label for="name" class="form-label">Ad Soyad</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Adınızı ve soyadınızı girin"
+          required
+          minlength="3"
+        />
+        <div class="invalid-feedback">
+          Lütfen geçerli bir ad soyad girin (en az 3 karakter).
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">E-posta</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          placeholder="example@mail.com"
+          required
+        />
+        <div class="invalid-feedback">Lütfen geçerli bir e-posta adresi girin.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Telefon</label>
+        <input
+          type="tel"
+          class="form-control"
+          id="phone"
+          name="phone"
+          placeholder="+90 5XX XXX XX XX"
+          pattern="^\+90\s5\d{2}\s\d{3}\s\d{2}\s\d{2}$"
+          required
+        />
+        <div class="invalid-feedback">
+          Lütfen Türkiye formatında geçerli bir telefon numarası girin (+90 5XX XXX XX XX).
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="address" class="form-label">Adres</label>
+        <textarea
+          class="form-control"
+          id="address"
+          name="address"
+          rows="3"
+          placeholder="Adresinizi girin"
+          required
+          minlength="10"
+        ></textarea>
+        <div class="invalid-feedback">
+          Lütfen en az 10 karakter uzunluğunda bir adres girin.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Kayıt Ol</button>
+    </form>
+  </div>
+
+  <script>
+    // Form doğrulama ve gönderme
+    (function () {
+      const form = document.getElementById("userForm");
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        // Form geçerliyse
+        const userData = {
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          phone: form.phone.value.trim(),
+          address: form.address.value.trim(),
+        };
+
+        fetch("/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Kayıt sırasında hata oluştu.");
+            return res.json();
+          })
+          .then((data) => {
+            alert("Kayıt başarıyla tamamlandı!");
+            form.reset();
+            form.classList.remove("was-validated");
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
