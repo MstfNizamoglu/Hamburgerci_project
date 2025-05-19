@@ -30,7 +30,6 @@ hamburgerci/
 │   ├── cheeseburger.jpeg
 │   ├── Edamame-Mushroom-Veggie-Burgers-9.jpg
 │   ├── Southern-Fried-Chicken-Burger-1.webp
-│   ├── script.js
 ├── data/
 │   └── users.json
 ├── server.js
